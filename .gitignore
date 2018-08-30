@@ -1,0 +1,8 @@
+.gradle
+.idea
+*.iml
+build
+run
+platform/js/node_modules
+platform/js/package-lock.json
+out
