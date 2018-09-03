@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformJsPlugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformJvmPlugin
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.nio.file.Files
 
 
 /*
@@ -60,10 +61,16 @@ enum class Platform(val codeName: String)
                     version = properties.nodejsVersion
                     npmVersion = properties.npmVersion
                     download = true
+
+                    val cacheDir = file("$rootDir/.gradle/node")
+                    workDir = file("$cacheDir/nodejs")
+                    npmWorkDir = file("$cacheDir/npm")
+                    yarnWorkDir = file("$cacheDir/yarn")
+                    nodeModulesDir = file("$cacheDir/node_modules")
                 }
 
                 dependencies {
-                    "expectedBy"(module.project("common"))
+                    "expectedBy"(module.project(COMMON.codeName))
 
                     "compile"(kotlin("stdlib-js"))
 
@@ -74,23 +81,34 @@ enum class Platform(val codeName: String)
                     withType<Kotlin2JsCompile> {
                         kotlinOptions.moduleKind = "umd"
                     }
+
                     create<Sync>("syncNodeModules") {
-                        dependsOn("compileKotlin2Js")
+                        dependsOn("compileKotlin2Js", "compileTestKotlin2Js")
                         doFirst {
                             from(the<SourceSetContainer>()["main"].output)
                             configurations["testCompile"].forEach { from(zipTree(it)) }
-                            include { it.path.endsWith(".js", true) }
-                            into("$buildDir/node_modules")
                         }
+                        include { it.path.endsWith(".js", true) }
+                        into("$buildDir/node_modules")
                     }
+
                     create<NpmTask>("installMocha") {
                         setArgs(listOf("install", "mocha@${properties.mochaVersion}"))
                     }
-                    val compileTest = getByName<Kotlin2JsCompile>("compileTestKotlin2Js")
+
                     create<NodeTask>("runMocha") {
                         dependsOn("installMocha", "syncNodeModules", "compileTestKotlin2Js")
-                        setScript(file("node_modules/mocha/bin/mocha"))
-                        setArgs(listOf(compileTest.destinationDir))
+                        onlyIf {
+                            val path = getByName<Kotlin2JsCompile>("compileTestKotlin2Js").destinationDir.toPath()
+                            if(Files.exists(path))
+                                Files.newDirectoryStream(path).use { f -> f.iterator().hasNext() }
+                            else
+                                false
+                        }
+                        doFirst {
+                            setScript(file("$rootDir/.gradle/node/node_modules/mocha/bin/mocha"))
+                        }
+                        setArgs(listOf(getByName<Kotlin2JsCompile>("compileTestKotlin2Js").destinationDir))
                     }
                     named<Test>("test") {
                         dependsOn("runMocha")
@@ -118,7 +136,7 @@ enum class Platform(val codeName: String)
                 }
 
                 dependencies {
-                    "expectedBy"(module.project("common"))
+                    "expectedBy"(module.project(COMMON.codeName))
 
                     "compile"(kotlin("stdlib-jdk8"))
 
