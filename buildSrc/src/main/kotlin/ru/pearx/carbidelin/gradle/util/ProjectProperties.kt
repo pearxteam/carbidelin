@@ -1,5 +1,7 @@
 package ru.pearx.carbidelin.gradle.util
 
+import org.gradle.api.Project
+import org.gradle.api.initialization.Settings
 import java.io.File
 import java.io.FileReader
 import java.util.*
@@ -12,8 +14,9 @@ import kotlin.reflect.jvm.isAccessible
 /*
  * Created by mrAppleXZ on 01.09.18.
  */
-class CarbidelinProperties
+class ProjectProperties
 {
+    lateinit var projectName: String private set
     lateinit var kotlinVersion: String private set
     lateinit var nodejsPluginVersion: String private set
     lateinit var nodejsVersion: String private set
@@ -22,7 +25,11 @@ class CarbidelinProperties
     lateinit var junitJupiterVersion: String private set
     lateinit var jacocoVersion: String private set
 
-    fun load(propertiesDir: File): CarbidelinProperties
+    fun load(project: Project) = load(project.rootDir)
+
+    fun load(settings: Settings) = load(settings.rootDir)
+
+    fun load(propertiesDir: File): ProjectProperties
     {
         val props = Properties()
         val classProps = this::class.memberProperties
@@ -37,6 +44,7 @@ class CarbidelinProperties
                 if (property.name == key && property is KMutableProperty<*> && property.returnType == stringType)
                 {
                     property.isAccessible = true
+                    @Suppress("UNCHECKED_CAST")
                     (property as KMutableProperty<String>).setter.call(this, value)
                 }
             }

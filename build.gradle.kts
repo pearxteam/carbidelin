@@ -1,2 +1,2 @@
-import ru.pearx.carbidelin.gradle.CarbidelinPlugin
-apply<CarbidelinPlugin>()
+import ru.pearx.carbidelin.gradle.modular.ModularProjectPlugin
+apply<ModularProjectPlugin>()

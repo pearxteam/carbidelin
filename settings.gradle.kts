@@ -1,2 +1,2 @@
-import ru.pearx.carbidelin.gradle.CarbidelinSettingsPlugin
-apply<CarbidelinSettingsPlugin>()
+import ru.pearx.carbidelin.gradle.modular.ModularSettingsPlugin
+apply<ModularSettingsPlugin>()

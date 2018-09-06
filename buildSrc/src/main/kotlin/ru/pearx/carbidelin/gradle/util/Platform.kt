@@ -31,7 +31,7 @@ enum class Platform(val codeName: String)
     //todo Native support
     COMMON("common")
     {
-        override fun applyProject(platform: Project, module: Project, root: Project, properties: CarbidelinProperties)
+        override fun applyProject(platform: Project, module: Project, root: Project, properties: ProjectProperties)
         {
             super.applyProject(platform, module, root, properties)
 
@@ -49,7 +49,7 @@ enum class Platform(val codeName: String)
     },
     JS("js")
     {
-        override fun applyProject(platform: Project, module: Project, root: Project, properties: CarbidelinProperties)
+        override fun applyProject(platform: Project, module: Project, root: Project, properties: ProjectProperties)
         {
             super.applyProject(platform, module, root, properties)
 
@@ -119,7 +119,7 @@ enum class Platform(val codeName: String)
     },
     JVM("jvm")
     {
-        override fun applyProject(platform: Project, module: Project, root: Project, properties: CarbidelinProperties)
+        override fun applyProject(platform: Project, module: Project, root: Project, properties: ProjectProperties)
         {
             super.applyProject(platform, module, root, properties)
 
@@ -159,7 +159,7 @@ enum class Platform(val codeName: String)
         }
     };
 
-    open fun applyProject(platform: Project, module: Project, root: Project, properties: CarbidelinProperties)
+    open fun applyProject(platform: Project, module: Project, root: Project, properties: ProjectProperties)
     {
         with(platform) {
             apply<BasePlugin>()
