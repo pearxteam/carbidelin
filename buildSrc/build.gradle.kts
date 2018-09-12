@@ -8,6 +8,9 @@ plugins {
 repositories {
     jcenter()
     gradlePluginPortal()
+    maven {
+        url = uri("https://dl.bintray.com/kotlin/kotlin-dev/")
+    }
 }
 
 val properties = Properties().apply { FileReader(File(rootDir.parent, "project.properties")).use { load(it) } }

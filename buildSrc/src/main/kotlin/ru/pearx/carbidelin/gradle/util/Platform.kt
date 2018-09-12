@@ -172,7 +172,10 @@ enum class Platform(val codeName: String)
             apply<BasePlugin>()
 
             repositories {
-                mavenCentral()
+                jcenter()
+                maven {
+                    url = uri("https://dl.bintray.com/kotlin/kotlin-dev/")
+                }
             }
 
             configure<BasePluginConvention> {

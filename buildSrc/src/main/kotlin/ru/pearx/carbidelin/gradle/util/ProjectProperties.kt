@@ -23,6 +23,8 @@ import kotlin.reflect.jvm.isAccessible
  */
 class ProjectProperties
 {
+    private val props = Properties()
+
     lateinit var projectName: String private set
     lateinit var kotlinVersion: String private set
     lateinit var nodejsPluginVersion: String private set
@@ -38,7 +40,6 @@ class ProjectProperties
 
     fun load(propertiesDir: File): ProjectProperties
     {
-        val props = Properties()
         val classProps = this::class.memberProperties
         val stringType = String::class.createType()
         FileReader(File(propertiesDir, "project.properties")).use {
@@ -58,4 +59,6 @@ class ProjectProperties
         }
         return this
     }
+
+    operator fun get(name: String) = props.get(name) as String
 }

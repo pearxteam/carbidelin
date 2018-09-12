@@ -5,7 +5,7 @@
  *  You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-package ru.pearx.carbidelin.text
+package ru.pearx.carbidelin.core.text
 
 
 /*
