@@ -11,12 +11,6 @@ import kotlinx.io.charsets.Charsets
 import kotlinx.io.charsets.encodeToByteArray
 import ru.pearx.carbidelin.core.text.charForDigit
 
-enum class SpaceEncodingMode
-{
-    PLUS,
-    PERCENT_ENCODED
-}
-
 fun isNeededToUriEncode(char: Char): Boolean
 {
     return when(char)
