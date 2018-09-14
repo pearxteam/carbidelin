@@ -7,4 +7,4 @@
 
 package ru.pearx.carbidelin.uri
 
-class UriDecodingException(message: String) : RuntimeException("UriDecoder: $message")
+class UriDecoderException(message: String) : RuntimeException("UriDecoder: $message")
