@@ -10,10 +10,7 @@ package ru.pearx.carbidelin.uri.test
 import ru.pearx.carbidelin.uri.SpaceEncodingMode
 import ru.pearx.carbidelin.uri.encodeUriComponent
 import ru.pearx.carbidelin.uri.isNeededToUriEncode
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 class UriEncoderTest
 {
@@ -21,32 +18,32 @@ class UriEncoderTest
     fun testNotNeededToEncodeAlphanumeric()
     {
         for (char in 'a'..'z')
-            assertFalse { isNeededToUriEncode(char) }
+            assertFalse(isNeededToUriEncode(char))
         for (char in 'A'..'Z')
-            assertFalse { isNeededToUriEncode(char) }
+            assertFalse(isNeededToUriEncode(char))
         for (char in '0'..'9')
-            assertFalse { isNeededToUriEncode(char) }
+            assertFalse(isNeededToUriEncode(char))
     }
 
     @Test
     fun testNotNeededToEncodeSpecials()
     {
-        assertFalse { isNeededToUriEncode('-') }
-        assertFalse { isNeededToUriEncode('_') }
-        assertFalse { isNeededToUriEncode('.') }
-        assertFalse { isNeededToUriEncode('~') }
+        assertFalse(isNeededToUriEncode('-'))
+        assertFalse(isNeededToUriEncode('_'))
+        assertFalse(isNeededToUriEncode('.'))
+        assertFalse(isNeededToUriEncode('~'))
     }
 
     @Test
     fun testNeededToEncode()
     {
-        assertTrue { isNeededToUriEncode('Ы') }
-        assertTrue { isNeededToUriEncode('/') }
-        assertTrue { isNeededToUriEncode('#') }
+        assertTrue(isNeededToUriEncode('Ы'))
+        assertTrue(isNeededToUriEncode('/'))
+        assertTrue(isNeededToUriEncode('#'))
     }
 
     @Test
-    fun testComponentEncoding()
+    fun testComponent()
     {
         assertEquals("%D1%82%D0%BE%D0%BC%D0%B0%D1%82", encodeUriComponent("томат"))
         assertEquals("%F0%9F%91%A8%E2%80%8D", encodeUriComponent("\uD83D\uDC68\u200D"))
@@ -54,7 +51,7 @@ class UriEncoderTest
     }
 
     @Test
-    fun testComponentEncodingWithSpacePlus()
+    fun testComponentWithSpaceAsPlus()
     {
         assertEquals("One%2C+two%2C+three...", encodeUriComponent("One, two, three...", SpaceEncodingMode.PLUS))
     }

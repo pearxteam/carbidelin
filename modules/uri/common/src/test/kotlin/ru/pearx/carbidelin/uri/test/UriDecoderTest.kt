@@ -8,14 +8,16 @@
 package ru.pearx.carbidelin.uri.test
 
 import ru.pearx.carbidelin.uri.SpaceEncodingMode
+import ru.pearx.carbidelin.uri.UriDecoderException
 import ru.pearx.carbidelin.uri.decodeUriComponent
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class UriDecoderTest
 {
     @Test
-    fun testComponentEncoding()
+    fun testComponent()
     {
         assertEquals("томат", decodeUriComponent("%d1%82%D0%bE%D0%BC%D0%b0%d1%82"))
         assertEquals("\uD83D\uDC68\u200D", decodeUriComponent("%F0%9F%91%A8%E2%80%8D"))
@@ -23,8 +25,25 @@ class UriDecoderTest
     }
 
     @Test
-    fun testComponentEncodingWithSpacePlus()
+    fun testComponentWithSpaceAsPlus()
     {
         assertEquals("One, two, three...", decodeUriComponent("One%2C+two%2C+three...", SpaceEncodingMode.PLUS))
+    }
+
+    @Test
+    fun testIncompleteSequence()
+    {
+        assertFailsWith<UriDecoderException> { decodeUriComponent("%") }
+        assertFailsWith<UriDecoderException> { decodeUriComponent("%2") }
+    }
+
+    @Test
+    fun testIllegalCharacters()
+    {
+        assertFailsWith<UriDecoderException> { decodeUriComponent("%*^") }
+        assertFailsWith<UriDecoderException> { decodeUriComponent("%FP") }
+        assertFailsWith<UriDecoderException> { decodeUriComponent("%PF") }
+        assertFailsWith<UriDecoderException> { decodeUriComponent("%PP") }
+        assertFailsWith<UriDecoderException> { decodeUriComponent("%ШИ") }
     }
 }
