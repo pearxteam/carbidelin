@@ -27,7 +27,6 @@ class ProjectProperties
 
     lateinit var projectName: String private set
     lateinit var kotlinVersion: String private set
-    lateinit var nodejsPluginVersion: String private set
     lateinit var nodejsVersion: String private set
     lateinit var npmVersion: String private set
     lateinit var mochaVersion: String private set

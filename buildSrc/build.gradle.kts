@@ -14,7 +14,9 @@ repositories {
 }
 
 val properties = Properties().apply { FileReader(File(rootDir.parent, "project.properties")).use { load(it) } }
+fun dep(base: String, versionName: String) = "$base:${properties[versionName] as String}"
+
 dependencies {
-    "compile"("org.jetbrains.kotlin:kotlin-gradle-plugin:${properties["kotlinVersion"] as String}")
-    "compile"("com.moowork.node:com.moowork.node.gradle.plugin:${properties["nodejsPluginVersion"] as String}")
+    "compile"(dep("org.jetbrains.kotlin:kotlin-gradle-plugin", "kotlinVersion"))
+    "compile"(dep("com.moowork.node:com.moowork.node.gradle.plugin", "nodejsPluginVersion"))
 }
