@@ -14,7 +14,7 @@ subplatforms {
             }
         }
         dependencies {
-            "compile"(kotlin("test-js"))
+            "compile"(kotlin("test-js")) // hack: kotlinx-io-js depends on the kotlin-test-js :/
         }
     }
 }
