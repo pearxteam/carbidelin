@@ -7,6 +7,7 @@
 
 package ru.pearx.carbidelin.uri.test
 
+import kotlinx.io.core.String
 import ru.pearx.carbidelin.uri.SpaceEncodingMode
 import ru.pearx.carbidelin.uri.UriDecoderException
 import ru.pearx.carbidelin.uri.decodeUriComponent
