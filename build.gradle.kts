@@ -10,10 +10,17 @@ plugins {
 }
 
 subplatforms {
-    repositories {
-        kotlinDev()
-    }
+    group = "ru.pearx.carbidelin"
+    apply<MavenPublishPlugin>()
     configure<MultiGradleExtension> {
         kotlinExperimentalFeatures.add("kotlin.ExperimentalUnsignedTypes")
+    }
+
+    configure<PublishingExtension> {
+        publications {
+            register<MavenPublication>("maven") {
+                from(components["java"])
+            }
+        }
     }
 }

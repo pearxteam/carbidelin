@@ -21,11 +21,6 @@ rootProject.name = "carbidelin"
 apply<MultiGradleModularSettings>()
 
 pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        kotlinDev()
-    }
-
     resolutionStrategy {
         eachPlugin {
             if (requested.id.id == "kotlin-gradle-plugin")
