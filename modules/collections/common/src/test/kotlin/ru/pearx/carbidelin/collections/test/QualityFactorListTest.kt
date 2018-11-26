@@ -27,7 +27,7 @@ class QualityFactorListTest {
     @Test
     fun testInvalidParsing() {
         assertFailsWith<IllegalArgumentException> { parseQualityFactorList("test;q=") }
-        assertFailsWith<IllegalArgumentException> { parseQualityFactorList("bloodyaltair;q=1;q=2") }
+        assertFailsWith<IllegalArgumentException> { parseQualityFactorList("pelmen;q=1;q=2") }
     }
 
     @Test
