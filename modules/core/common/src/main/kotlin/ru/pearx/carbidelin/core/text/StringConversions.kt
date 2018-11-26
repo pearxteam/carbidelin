@@ -36,12 +36,10 @@ fun ULong.toBinaryString(pad: Boolean = false) = numToString(toString(BINARY_RAD
 
 fun ByteArray.toHexString(pad: Boolean = false) = StringBuilder().also { hexStringTo(it, pad) }.toString()
 
-fun ByteArray.hexStringTo(appendable: Appendable, pad: Boolean = false)
-{
-    for(byte in this)
-    {
+fun ByteArray.hexStringTo(appendable: Appendable, pad: Boolean = false) {
+    for (byte in this) {
         appendable.append(byte.toHexString(pad))
     }
 }
 
-private fun numToString(value: String, size: Int, pad: Boolean) = if(pad) value.padStart(size, '0') else value
+private fun numToString(value: String, size: Int, pad: Boolean) = if (pad) value.padStart(size, '0') else value

@@ -11,22 +11,18 @@ import kotlinx.io.core.String
 import ru.pearx.carbidelin.core.text.isValidForRadix
 import ru.pearx.carbidelin.core.text.toDigit
 
-fun decodeUriComponent(s: String, spaceMode: SpaceEncodingMode = SpaceEncodingMode.PLUS): String
-{
+fun decodeUriComponent(s: String, spaceMode: SpaceEncodingMode = SpaceEncodingMode.PLUS): String {
     return StringBuilder(s.length).apply {
         val buf = ByteArray(s.length / 3)
         var bufWritten = 0
 
         var index = 0
-        while (index < s.length)
-        {
+        while (index < s.length) {
             val char = s[index]
 
-            if (char == '%')
-            {
+            if (char == '%') {
                 // check that the string doesn't end at the first or second character of percent sequence
-                if (s.length > index + 2)
-                {
+                if (s.length > index + 2) {
                     val hex0 = s[++index]
                     val hex1 = s[++index]
 
@@ -39,10 +35,8 @@ fun decodeUriComponent(s: String, spaceMode: SpaceEncodingMode = SpaceEncodingMo
                 else
                     throw UriDecoderException("Incomplete percent-encoding sequence '%${if (s.length > index + 1) s[index + 1] else ""}${if (s.length > index + 2) s[index + 2] else ""}'")
             }
-            else
-            {
-                if (bufWritten > 0)
-                {
+            else {
+                if (bufWritten > 0) {
                     append(String(buf, length = bufWritten)) // flush the buffer
                     bufWritten = 0
                 }

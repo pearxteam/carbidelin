@@ -7,8 +7,7 @@
 
 package ru.pearx.carbidelin.uri
 
-enum class SpaceEncodingMode
-{
+enum class SpaceEncodingMode {
     PLUS,
     PERCENT_ENCODED
 }

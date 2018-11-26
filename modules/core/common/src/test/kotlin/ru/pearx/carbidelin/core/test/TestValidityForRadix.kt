@@ -12,11 +12,9 @@ import kotlin.test.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-class TestValidityForRadix
-{
+class TestValidityForRadix {
     @Test
-    fun test0()
-    {
+    fun test0() {
         assertFalse('0'.isValidForRadix(0))
         assertFalse('1'.isValidForRadix(0))
         assertFalse('9'.isValidForRadix(0))
@@ -27,8 +25,7 @@ class TestValidityForRadix
     }
 
     @Test
-    fun test1()
-    {
+    fun test1() {
         assertTrue('0'.isValidForRadix(1))
         assertFalse('1'.isValidForRadix(1))
         assertFalse('9'.isValidForRadix(1))
@@ -39,8 +36,7 @@ class TestValidityForRadix
     }
 
     @Test
-    fun test10()
-    {
+    fun test10() {
         assertTrue('0'.isValidForRadix(10))
         assertTrue('1'.isValidForRadix(10))
         assertTrue('9'.isValidForRadix(10))
@@ -51,8 +47,7 @@ class TestValidityForRadix
     }
 
     @Test
-    fun test16()
-    {
+    fun test16() {
 
         assertTrue('0'.isValidForRadix(16))
         assertTrue('1'.isValidForRadix(16))
@@ -64,8 +59,7 @@ class TestValidityForRadix
     }
 
     @Test
-    fun test36()
-    {
+    fun test36() {
         assertTrue('0'.isValidForRadix(36))
         assertTrue('1'.isValidForRadix(36))
         assertTrue('9'.isValidForRadix(36))

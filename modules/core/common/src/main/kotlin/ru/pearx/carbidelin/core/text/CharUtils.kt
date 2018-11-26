@@ -9,20 +9,16 @@ package ru.pearx.carbidelin.core.text
 
 import kotlin.math.min
 
-fun Char.isValidForRadix(radix: Int): Boolean
-{
-    return when
-    {
+fun Char.isValidForRadix(radix: Int): Boolean {
+    return when {
         radix > 0 && this in '0'..('0' - 1 + min(radix, 10)) -> true
         radix > 10 && this.toUpperCase() in 'A'..('A' - 1 + min(radix - 10, 26)) -> true
         else -> false
     }
 }
 
-fun Char.toDigit(): Int
-{
-    return when(this)
-    {
+fun Char.toDigit(): Int {
+    return when (this) {
         in '0'..'9' -> this - '0'
         in 'A'..'Z' -> 10 + (this - 'A')
         in 'a'..'z' -> 10 + (this - 'a')
@@ -30,17 +26,14 @@ fun Char.toDigit(): Int
     }
 }
 
-fun charForDigit(digit: Int, radix: Int, uppercase: Boolean = false): Char
-{
-    return if (digit in 0..(radix - 1) && radix in 2..36)
-    {
+fun charForDigit(digit: Int, radix: Int, uppercase: Boolean = false): Char {
+    return if (digit in 0..(radix - 1) && radix in 2..36) {
         if (digit < 10)
             '0' + digit
         else
             (if (uppercase) 'A' else 'a') + digit - 10
     }
-    else
-    {
+    else {
         '\u0000'
     }
 }
