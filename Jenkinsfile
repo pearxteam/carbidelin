@@ -8,7 +8,7 @@ pipeline {
         stage('prepare') { steps { ciSkip 'check' } }
         stage('build') {
             steps {
-                sh './gradlew clean build -PdevBuildNumber=${BUILD_NUMBER}'
+                sh './gradlew clean build'
             }
         }
         stage('deploy-develop') {
