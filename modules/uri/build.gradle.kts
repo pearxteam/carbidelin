@@ -4,8 +4,8 @@ import ru.pearx.multigradle.util.js.MultiGradleJsExtension
 
 subplatforms {
     dependencies {
-        "compile"(mpdep("org.jetbrains.kotlinx:kotlinx-io:${propertyString("kotlinxIoVersion")}", PLATFORM_COMMON))
-        "compile"(mpdep(project(":modules:core")))
+        "api"(mpdep("org.jetbrains.kotlinx:kotlinx-io:${propertyString("kotlinxIoVersion")}", PLATFORM_COMMON))
+        "api"(mpdep(project(":modules:core")))
     }
     ifPlatform(PLATFORM_JS) {
         configure<MultiGradleJsExtension> {
@@ -14,7 +14,7 @@ subplatforms {
             }
         }
         dependencies {
-            "compile"(kotlin("test-js")) // hack: kotlinx-io-js depends on the kotlin-test-js :/
+            "implementation"(kotlin("test-js")) // hack: kotlinx-io-js depends on the kotlin-test-js :/
         }
     }
 }

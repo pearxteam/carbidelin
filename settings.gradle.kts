@@ -10,6 +10,7 @@ buildscript {
     val multigradleVersion: String by settings
     repositories {
         gradlePluginPortal()
+        maven { url = uri("https://repo.pearx.ru/maven2/develop/")}
     }
     dependencies {
         classpath("ru.pearx.multigradle:multigradle:$multigradleVersion")
@@ -21,6 +22,10 @@ rootProject.name = "carbidelin"
 apply<MultiGradleModularSettings>()
 
 pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven { url = uri("https://repo.pearx.ru/maven2/develop/")}
+    }
     resolutionStrategy {
         eachPlugin {
             if (requested.id.id == "kotlin-gradle-plugin")
