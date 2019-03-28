@@ -1,12 +1,18 @@
 import ru.pearx.multigradle.util.MultiGradleExtension
 import ru.pearx.multigradle.util.subplatforms
 
+val devBuildNumber: String? by project
+
 plugins {
     id("ru.pearx.multigradle.modular.project")
     id("kotlin-gradle-plugin") apply (false)
 }
 
 subplatforms {
+    if(devBuildNumber != null) {
+        version = "$version-dev-$devBuildNumber"
+    }
+
     group = "ru.pearx.carbidelin"
 
     apply<MavenPublishPlugin>()
