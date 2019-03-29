@@ -1,5 +1,4 @@
 import ru.pearx.multigradle.plugin.modular.MultiGradleModularSettings
-import ru.pearx.multigradle.util.kotlinDev
 
 // Scary things happen here...
 
