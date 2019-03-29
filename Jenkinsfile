@@ -34,8 +34,7 @@ pipeline {
     post {
         always {
             ciSkip 'postProcess'
-            junit 'modules/*/jvm/build/test-results-prefixed/**/*.xml'
-            junit 'modules/*/js/build/test-results-prefixed/**/*.xml'
+            junit 'modules/*/*/build/test-results-prefixed/**/*.xml'
 
         }
     }
