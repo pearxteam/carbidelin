@@ -30,11 +30,10 @@ pipeline {
                 sh "./gradlew publishRelease -PpearxRepoUsername=${PEARX_REPO_USR} -PpearxRepoPassword=${PEARX_REPO_PSW}"
             }
         }
+
+        stage('jvm-tests') { post { always { junit 'modules/*/jvm/build/test-results/**/*.xml' } } }
+
+        stage('js-tests') { post { always { junit 'modules/*/js/build/test-results/**/*.xml' } } }
     }
-    post {
-        always {
-            ciSkip 'postProcess'
-            junit 'modules/*/*/build/test-results/**/*.xml'
-        }
-    }
+    post { always { ciSkip 'postProcess' } }
 }
