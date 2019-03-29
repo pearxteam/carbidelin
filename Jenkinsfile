@@ -31,5 +31,10 @@ pipeline {
             }
         }
     }
-    post { always { ciSkip 'postProcess' } }
+    post {
+        always {
+            ciSkip 'postProcess'
+            junit 'modules/*/*/build/test-results/**/*.xml'
+        }
+    }
 }
