@@ -9,15 +9,14 @@ plugins {
 }
 
 subplatforms {
-    if(devBuildNumber != null) {
-        version = "$version-dev-$devBuildNumber"
-    }
-
     group = "ru.pearx.carbidelin"
 
     apply<MavenPublishPlugin>()
 
     configure<MultiGradleExtension> {
+        if(devBuildNumber != null) {
+            projectVersion = "$projectVersion-dev-$devBuildNumber"
+        }
         kotlinExperimentalFeatures.add("kotlin.ExperimentalUnsignedTypes")
     }
 
