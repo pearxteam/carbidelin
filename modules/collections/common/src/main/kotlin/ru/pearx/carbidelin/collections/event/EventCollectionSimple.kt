@@ -7,7 +7,7 @@
 
 package ru.pearx.carbidelin.collections.event
 
-class EventCollectionSimple<E>(val base: MutableCollection<E>, private val onUpdate: CollectionEventHandlerSimple) : MutableCollection<E> {
+class EventCollectionSimple<C : MutableCollection<E>, E>(val base: C, private val onUpdate: CollectionEventHandlerSimple) : MutableCollection<E> {
     override val size: Int
         get() = base.size
 
