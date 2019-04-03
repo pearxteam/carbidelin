@@ -8,13 +8,14 @@
 package ru.pearx.carbidelin.collections.test.event
 
 import ru.pearx.carbidelin.collections.event.EventCollectionSimple
+import ru.pearx.carbidelin.collections.event.eventCollectionSimpleBy
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class EventCollectionSimpleTest {
     inner class TestingContext(empty: Boolean = false) {
         var modified = false
-        var collection = EventCollectionSimple(if(empty) mutableSetOf() else mutableSetOf("theevilroot", "root", null, "")) { modified = true }
+        var collection = eventCollectionSimpleBy(if(empty) mutableSetOf() else mutableSetOf("theevilroot", "root", null, "")) { modified = true }
     }
 
     @Test
