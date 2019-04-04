@@ -7,6 +7,8 @@
 
 package ru.pearx.carbidelin.collections
 
+import kotlin.math.max
+
 open class SubList<E>(private val base: MutableList<E>, fromIndex: Int, toIndex: Int) : AbstractMutableList<E>() {
     private var _size = toIndex - fromIndex
     private val offset = fromIndex
@@ -48,11 +50,11 @@ open class SubList<E>(private val base: MutableList<E>, fromIndex: Int, toIndex:
         return -1
     }
 
-    override fun listIterator(): MutableListIterator<E> = listIterator(0)
+    override fun listIterator(): MutableListIterator<E> = listIterator(offset)
 
     override fun listIterator(index: Int): MutableListIterator<E> = checkIndexAndThrow(index).let {
         object : MutableListIterator<E> {
-            val baseIterator = base.listIterator(index)
+            val baseIterator = base.listIterator(index + offset)
 
             override fun hasPrevious(): Boolean = checkIndex(previousIndex()) && baseIterator.hasPrevious()
 
@@ -80,7 +82,7 @@ open class SubList<E>(private val base: MutableList<E>, fromIndex: Int, toIndex:
 
     override fun subList(fromIndex: Int, toIndex: Int): MutableList<E> = subListBy(this, fromIndex, toIndex)
 
-    private fun checkIndex(index: Int) = index in 0..(size - 1)
+    private fun checkIndex(index: Int) = index in 0..(max(0, size - 1))
 
     private fun checkIndexAndThrow(index: Int) {
         if (!checkIndex(index))
