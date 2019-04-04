@@ -7,16 +7,14 @@
 
 package ru.pearx.carbidelin.collections.test
 
-import ru.pearx.carbidelin.collections.*
-import ru.pearx.carbidelin.collections.event.eventCollectionSimpleBy
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
+import ru.pearx.carbidelin.collections.subListBy
+import kotlin.test.*
 
 class SubListTest {
     //[null, 2, null, 3, 3, null]
     // *yes, I love nulls ❤*
     private fun createCollection() = subListBy(mutableListOf("1", null, "2", null, "3", "3", null, null, "4", "6", "10"), 1, 7)
+
     private fun createEmptyCollection() = subListBy(mutableListOf<String?>(), 0, 0)
 
     @Test
@@ -40,26 +38,67 @@ class SubListTest {
     @Test
     fun testIsEmpty() {
         createCollection().apply {
-            assertEquals(false, isEmpty())
+            assertFalse(isEmpty())
         }
         createEmptyCollection().apply {
-            assertEquals(true, isEmpty())
+            assertTrue(isEmpty())
         }
     }
 
     @Test
     fun testContains() {
         createCollection().apply {
-            assertEquals(true, contains(null))
-            assertEquals(true, contains("2"))
-            assertEquals(true, contains("3"))
-            assertEquals(false, contains("4"))
-            assertEquals(false, contains(""))
+            assertTrue(contains(null))
+            assertTrue(contains("2"))
+            assertTrue(contains("3"))
+            assertFalse(contains("4"))
+            assertFalse(contains(""))
         }
         createEmptyCollection().apply {
-            assertEquals(false, contains(null))
-            assertEquals(false, contains("2"))
-            assertEquals(false, contains(""))
+            assertFalse(contains(null))
+            assertFalse(contains("2"))
+            assertFalse(contains(""))
         }
     }
+
+    @Test
+    fun testContainsAll() {
+        createCollection().apply {
+            assertTrue(containsAll(listOf()))
+            assertTrue(containsAll(listOf(null)))
+            assertTrue(containsAll(listOf("2")))
+            assertTrue(containsAll(listOf(null, "3", "2")))
+            assertFalse(containsAll(listOf("6", "10")))
+            assertFalse(containsAll(listOf(null, "3", "2", "10")))
+        }
+        createEmptyCollection().apply {
+            assertTrue(containsAll(listOf()))
+            assertFalse(containsAll(listOf("free time")))
+            assertFalse(containsAll(listOf(null, "3", "2", "pineapple")))
+        }
+    }
+
+    @Test
+    fun testIterator() {
+        createCollection().also { oldList ->
+            assertEquals(listOf(null, "2", null, "3", "3", null), mutableListOf<String?>().also { newList ->
+                for (el in oldList) {
+                    newList.add(el)
+                }
+            })
+        }
+
+        createCollection().apply {
+            val iter = iterator()
+            var counter = 0
+            for (el in iter) {
+                if(counter % 2 == 0)
+                    iter.remove()
+                counter++
+            }
+            assertEquals(listOf("2", "3", null), this)
+        }
+    }
+
+    //todo
 }
