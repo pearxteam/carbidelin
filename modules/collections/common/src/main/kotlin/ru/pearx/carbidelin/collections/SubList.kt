@@ -22,23 +22,11 @@ open class SubList<E>(private val base: MutableList<E>, fromIndex: Int, toIndex:
     override val size: Int
         get() = _size
 
-    override fun add(element: E): Boolean = add(size, element).let { true }
-
     override fun add(index: Int, element: E) = checkIndexAndThrow(index).let { base.add(index, element) }.also { _size++ }
 
     override fun addAll(index: Int, elements: Collection<E>): Boolean = checkIndexAndThrow(index).let { base.addAll(index, elements) }.also { _size += elements.size }
 
     override fun addAll(elements: Collection<E>): Boolean = addAll(size, elements)
-
-    override fun clear() {
-        val it = iterator()
-        for (el in it)
-            it.remove()
-    }
-
-    override fun contains(element: E): Boolean = indexOf(element) != -1
-
-    override fun containsAll(elements: Collection<E>): Boolean = elements.none { it !in this }
 
     override fun indexOf(element: E): Int {
         val it = listIterator()
@@ -86,37 +74,7 @@ open class SubList<E>(private val base: MutableList<E>, fromIndex: Int, toIndex:
         }
     }
 
-    override fun remove(element: E): Boolean {
-        val index = indexOf(element)
-        if (index != -1) {
-            removeAt(index)
-            return true
-        }
-        return false
-    }
-
-    override fun removeAll(elements: Collection<E>): Boolean {
-        var flag = false
-        for (element in elements) {
-            if (remove(element))
-                flag = true
-        }
-        return flag
-    }
-
     override fun removeAt(index: Int): E = checkIndexAndThrow(index).let { base.removeAt(index) }.also { _size-- }
-
-    override fun retainAll(elements: Collection<E>): Boolean {
-        var flag = false
-        for (element in elements) {
-            val index = indexOf(element)
-            if (index != -1) {
-                removeAt(index)
-                flag = true
-            }
-        }
-        return flag
-    }
 
     override fun set(index: Int, element: E): E = checkIndexAndThrow(index).let { base.set(index + offset, element) }
 
