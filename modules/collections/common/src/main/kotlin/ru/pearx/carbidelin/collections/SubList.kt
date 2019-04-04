@@ -50,7 +50,7 @@ open class SubList<E>(private val base: MutableList<E>, fromIndex: Int, toIndex:
         return -1
     }
 
-    override fun listIterator(): MutableListIterator<E> = listIterator(offset)
+    override fun listIterator(): MutableListIterator<E> = listIterator(0)
 
     override fun listIterator(index: Int): MutableListIterator<E> = checkIndexAndThrow(index).let {
         object : MutableListIterator<E> {
