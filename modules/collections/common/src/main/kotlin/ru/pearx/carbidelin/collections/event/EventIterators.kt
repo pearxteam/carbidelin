@@ -14,15 +14,37 @@ class EventMutableIteratorSimple<T>(private val base: MutableIterator<T>, privat
     }
 }
 
-class EventMutableIterator<T>(private val base: MutableIterator<T>, private val onUpdate: CollectionEventHandler<T>) : MutableIterator<T> {
+class EventMutableIterator<T>(private val base: MutableIterator<T>, private val onUpdate: CollectionEventHandler<T>) : MutableIterator<T> by base {
     private var lastElement: T? = null
-
-    override fun hasNext(): Boolean = base.hasNext()
 
     override fun next(): T = base.next().also { lastElement = it }
 
     override fun remove() {
         base.remove()
         onUpdate.onRemove(lastElement as T)
+    }
+}
+
+class EventMutableListIteratorSimple<T>(private val base: MutableListIterator<T>, private val onUpdate: CollectionEventHandlerSimple) : MutableListIterator<T> by base {
+    private var lastElement: T? = null
+
+    override fun next(): T = base.next().also { lastElement = it }
+
+    override fun previous(): T = base.previous().also { lastElement = it }
+
+    override fun add(element: T) {
+        base.add(element)
+        onUpdate()
+    }
+
+    override fun remove() {
+        base.remove()
+        onUpdate()
+    }
+
+    override fun set(element: T) {
+        base.set(element)
+        if(lastElement != element)
+            onUpdate()
     }
 }

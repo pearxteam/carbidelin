@@ -7,7 +7,6 @@
 
 package ru.pearx.carbidelin.collections.test.event
 
-import ru.pearx.carbidelin.collections.event.EventCollectionSimple
 import ru.pearx.carbidelin.collections.event.eventCollectionSimpleBy
 import kotlin.test.Test
 import kotlin.test.assertEquals
