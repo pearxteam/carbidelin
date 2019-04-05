@@ -78,27 +78,22 @@ open class EventCollectionSimpleRA<C : MutableCollection<E>, E>(base: C, onUpdat
 open class EventCollection<C : MutableCollection<E>, E>(base: C, onUpdate: CollectionEventHandler<E>) : AbstractEventCollection<C, E, CollectionEventHandler<E>>(base, onUpdate) {
     override fun add(element: E): Boolean = base.add(element).ifTrue { onUpdate.onAdd(element) }
 
-    override fun addAll(elements: Collection<E>): Boolean = base.addAll(elements).ifTrue { onUpdate.onAdd(elements) }
+    override fun addAll(elements: Collection<E>): Boolean = base.addAll(elements).ifTrue { elements.forEach { onUpdate.onAdd(it) } }
 
     override fun iterator(): MutableIterator<E> = EventMutableIterator(base.iterator(), onUpdate)
 
     override fun remove(element: E): Boolean = base.remove(element).ifTrue { onUpdate.onRemove(element) }
 
-    override fun removeAll(elements: Collection<E>): Boolean = base.removeAll(elements).ifTrue { onUpdate.onRemove(elements) }
+    override fun removeAll(elements: Collection<E>): Boolean = base.removeAll(elements).ifTrue { elements.forEach { onUpdate.onRemove(it) } }
 
-    override fun retainAll(elements: Collection<E>): Boolean {
-        var modified = false
-        val removed = arrayListOf<E>()
-        val iter = base.iterator()
-        for (element in iter) {
-            if (element !in elements) {
-                iter.remove()
-                modified = true
-                removed.add(element)
+    override fun retainAll(elements: Collection<E>): Boolean = iterator().run {
+        var flag = false
+        for (el in this)
+            if (el !in elements) {
+                remove()
+                flag = true
             }
-        }
-        onUpdate.onRemove(elements)
-        return modified
+        flag
     }
 }
 open class EventCollectionRA<C : MutableCollection<E>, E>(base: C, onUpdate: CollectionEventHandler<E>) : EventCollection<C, E>(base, onUpdate), RandomAccess

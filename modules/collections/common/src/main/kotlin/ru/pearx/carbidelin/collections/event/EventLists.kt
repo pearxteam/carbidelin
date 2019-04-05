@@ -58,7 +58,7 @@ open class EventList<C : MutableList<E>, E>(base: C, onUpdate: ListEventHandler<
 
     override fun addAll(elements: Collection<E>): Boolean = addAll(size, elements)
 
-    override fun addAll(index: Int, elements: Collection<E>): Boolean = base.addAll(index, elements).ifTrue { onUpdate.onAdd(index, elements) }
+    override fun addAll(index: Int, elements: Collection<E>): Boolean = base.addAll(index, elements).ifTrue { elements.forEach { onUpdate.onAdd(index, it) } }
 
     override fun iterator(): MutableIterator<E> = listIterator()
 
@@ -105,6 +105,19 @@ open class EventListRA<C : MutableList<E>, E>(base: C, onUpdate: ListEventHandle
 //endregion
 
 
-//region Factories
+//region Parent Factories
+fun <C : MutableList<E>, E> eventListSimpleBy(base: C, onUpdate: ListEventHandlerSimple): IEventList<C, E> = if(base is RandomAccess) EventListSimpleRA(base, onUpdate) else EventListSimple(base, onUpdate)
+fun <C : MutableList<E>, E> eventListBy(base: C, onUpdate: ListEventHandler<E>): IEventList<C, E> = if(base is RandomAccess) EventListRA(base, onUpdate) else EventList(base, onUpdate)
+inline fun <C : MutableList<E>, E> eventListBy(base: C, crossinline block: ListEventHandlerScope<E>.() -> Unit): IEventList<C, E> = eventListBy(base, ListEventHandlerScope<E>().also(block).createHandler())
+//endregion
 
+
+//region Child Factories
+fun <E> eventListSimpleOf(vararg elements: E, onUpdate: ListEventHandlerSimple): IEventList<MutableList<E>, E> = eventListSimpleBy(mutableListOf(*elements), onUpdate)
+inline fun <E> eventListOf(vararg elements: E, onUpdate: ListEventHandler<E>): IEventList<MutableList<E>, E> = eventListBy(mutableListOf(*elements), onUpdate)
+inline fun <E> eventListOf(vararg elements: E, crossinline block: ListEventHandlerScope<E>.() -> Unit): IEventList<MutableList<E>, E> = eventListBy(mutableListOf(*elements), block)
+
+fun <E> eventArrayListSimpleOf(vararg elements: E, onUpdate: ListEventHandlerSimple): IEventList<MutableList<E>, E> = eventListSimpleBy(arrayListOf(*elements), onUpdate)
+inline fun <E> eventArrayListOf(vararg elements: E, onUpdate: ListEventHandler<E>): IEventList<MutableList<E>, E> = eventListBy(arrayListOf(*elements), onUpdate)
+inline fun <E> eventArrayListOf(vararg elements: E, crossinline block: ListEventHandlerScope<E>.() -> Unit): IEventList<MutableList<E>, E> = eventListBy(arrayListOf(*elements), block)
 //endregion
