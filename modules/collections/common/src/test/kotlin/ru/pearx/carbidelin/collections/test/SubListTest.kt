@@ -18,6 +18,25 @@ class SubListTest {
     private fun createEmptyCollection() = subListBy(mutableListOf<String?>(), 0, 0)
 
     @Test
+    fun testToString() {
+        assertEquals("[null, 2, null, 3, 3, null]", createCollection().toString())
+    }
+
+    @Test
+    fun testHashCode() {
+        assertEquals(933730323, createCollection().hashCode())
+    }
+
+    @Test
+    fun testEquals() {
+        assertEquals(listOf(null, "2", null, "3", "3", null), createCollection())
+        assertEquals(createCollection(), createCollection())
+        assertNotEquals<List<String?>?>(createCollection(), null)
+        assertNotEquals(createCollection(), createEmptyCollection())
+        assertNotEquals(createCollection(), listOf(null, "2", null, "3", "3", null, null, "4"))
+    }
+
+    @Test
     fun testCreation() {
         assertFailsWith<IllegalArgumentException> { subListBy(mutableListOf("1", null, "2"), 2, 1) }
         assertFailsWith<IndexOutOfBoundsException> { subListBy(mutableListOf("1", null, "2"), -2, 1) }
@@ -99,6 +118,5 @@ class SubListTest {
             assertEquals(listOf("2", "3", null), this)
         }
     }
-
-    //todo
+    //todo complete these tests
 }
