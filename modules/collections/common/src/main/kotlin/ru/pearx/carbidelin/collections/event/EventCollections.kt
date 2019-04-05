@@ -7,6 +7,8 @@
 
 package ru.pearx.carbidelin.collections.event
 
+
+//region Interfaces
 interface IEventCollection<C : MutableCollection<E>, E> : MutableCollection<E> {
     override val size: Int
         get() = base.size
@@ -19,16 +21,11 @@ interface IEventCollection<C : MutableCollection<E>, E> : MutableCollection<E> {
 
     val base: C
 }
+//endregion
 
-abstract class AbstractEventCollection<C : MutableCollection<E>, E>(override val base: C) : IEventCollection<C, E> {
-    override fun equals(other: Any?): Boolean = base == other
 
-    override fun hashCode(): Int = base.hashCode()
-
-    override fun toString(): String = base.toString()
-}
-
-open class EventCollectionSimple<C : MutableCollection<E>, E>(base: C, protected val onUpdate: CollectionEventHandlerSimple) : AbstractEventCollection<C, E>(base) {
+//region Abstracts
+abstract class AbstractEventCollectionSimple<C : MutableCollection<E>, E>(override val base: C, protected val onUpdate: CollectionEventHandlerSimple) : IEventCollection<C, E> {
     override fun add(element: E): Boolean = base.add(element).ifTrue(onUpdate)
 
     override fun addAll(elements: Collection<E>): Boolean = base.addAll(elements).ifTrue(onUpdate)
@@ -47,19 +44,41 @@ open class EventCollectionSimple<C : MutableCollection<E>, E>(base: C, protected
     override fun removeAll(elements: Collection<E>): Boolean = base.removeAll(elements).ifTrue(onUpdate)
 
     override fun retainAll(elements: Collection<E>): Boolean = base.retainAll(elements).ifTrue(onUpdate)
+
+    override fun equals(other: Any?): Boolean = base == other
+
+    override fun hashCode(): Int = base.hashCode()
+
+    override fun toString(): String = base.toString()
 }
-open class EventCollectionSimpleRA<C : MutableCollection<E>, E>(base: C, onUpdate: CollectionEventHandlerSimple) : EventCollectionSimple<C, E>(base, onUpdate), RandomAccess
 
-open class EventCollection<C : MutableCollection<E>, E>(base: C, protected val onUpdate: CollectionEventHandler<E>) : AbstractEventCollection<C, E>(base) {
-    override fun add(element: E): Boolean = base.add(element).ifTrue { onUpdate.onAdd(element) }
-
-    override fun addAll(elements: Collection<E>): Boolean = base.addAll(elements).ifTrue { onUpdate.onAdd(elements) }
-
+abstract class AbstractEventCollection<C : MutableCollection<E>, E, U : AbstractCollectionEventHandler<E>>(override val base: C, protected val onUpdate: U) : IEventCollection<C, E> {
     override fun clear() {
         val lst = ArrayList(this)
         base.clear()
         onUpdate.onClear(lst)
     }
+
+    override fun equals(other: Any?): Boolean = base == other
+
+    override fun hashCode(): Int = base.hashCode()
+
+    override fun toString(): String = base.toString()
+}
+//endregion
+
+
+//region CollectionSimple
+open class EventCollectionSimple<C : MutableCollection<E>, E>(base: C, onUpdate: CollectionEventHandlerSimple) : AbstractEventCollectionSimple<C, E>(base, onUpdate)
+open class EventCollectionSimpleRA<C : MutableCollection<E>, E>(base: C, onUpdate: CollectionEventHandlerSimple) : EventCollectionSimple<C, E>(base, onUpdate), RandomAccess
+//endregion
+
+
+//region Collection
+open class EventCollection<C : MutableCollection<E>, E>(base: C, onUpdate: CollectionEventHandler<E>) : AbstractEventCollection<C, E, CollectionEventHandler<E>>(base, onUpdate) {
+    override fun add(element: E): Boolean = base.add(element).ifTrue { onUpdate.onAdd(element) }
+
+    override fun addAll(elements: Collection<E>): Boolean = base.addAll(elements).ifTrue { onUpdate.onAdd(elements) }
 
     override fun iterator(): MutableIterator<E> = EventMutableIterator(base.iterator(), onUpdate)
 
@@ -83,7 +102,11 @@ open class EventCollection<C : MutableCollection<E>, E>(base: C, protected val o
     }
 }
 open class EventCollectionRA<C : MutableCollection<E>, E>(base: C, onUpdate: CollectionEventHandler<E>) : EventCollection<C, E>(base, onUpdate), RandomAccess
+//endregion
 
+
+//region Factories
 fun <C : MutableCollection<E>, E> eventCollectionSimpleBy(base: C, onUpdate: CollectionEventHandlerSimple): IEventCollection<C, E> = if(base is RandomAccess) EventCollectionSimpleRA(base, onUpdate) else EventCollectionSimple(base, onUpdate)
 fun <C : MutableCollection<E>, E> eventCollectionBy(base: C, onUpdate: CollectionEventHandler<E>): IEventCollection<C, E> = if(base is RandomAccess) EventCollectionRA(base, onUpdate) else EventCollection(base, onUpdate)
 inline fun <C : MutableCollection<E>, E> eventCollectionBy(base: C, crossinline block: CollectionEventHandlerScope<E>.() -> Unit): IEventCollection<C, E> = eventCollectionBy(base, CollectionEventHandlerScope<E>().also(block).createHandler())
+//endregion

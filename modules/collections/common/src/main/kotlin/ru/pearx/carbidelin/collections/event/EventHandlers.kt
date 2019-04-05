@@ -7,27 +7,36 @@
 
 package ru.pearx.carbidelin.collections.event
 
+//region Simple
 typealias CollectionEventHandlerSimple = () -> Unit
 
 typealias ListEventHandlerSimple = () -> Unit
+//endregion
 
-interface CollectionEventHandler<T> {
+
+//region Standard
+interface AbstractCollectionEventHandler<T> {
+    fun onClear(elements: Collection<T>)
+}
+
+interface CollectionEventHandler<T> : AbstractCollectionEventHandler<T> {
     fun onAdd(element: T)
     fun onAdd(elements: Collection<T>)
     fun onRemove(element: T)
     fun onRemove(elements: Collection<T>)
-    fun onClear(elements: Collection<T>)
 }
 
-interface ListEventHandler<T> {
-    fun onAdd(element: T)
-    fun onAdd(elements: Collection<T>)
-    fun onRemove(element: T)
-    fun onRemove(elements: Collection<T>)
-    fun onClear(elements: Collection<T>)
+interface ListEventHandler<T> : AbstractCollectionEventHandler<T> {
+    fun onAdd(index: Int, element: T)
+    fun onAdd(index: Int, elements: Collection<T>)
+    fun onRemove(index: Int, element: T)
+    fun onRemove(index: Int, elements: Collection<Pair<Int, T>>)
+    fun onSet(index: Int, prevValue: T, newValue: T)
 }
+//endregion
 
-// BUILDER
+
+//region Builder
 private typealias ElementBlock<T> = (element: T) -> Unit
 private typealias ElementBlocks<T> = (elements: Collection<T>) -> Unit
 
@@ -81,3 +90,4 @@ class CollectionEventHandlerScope<T> {
         }
     }
 }
+//endregion

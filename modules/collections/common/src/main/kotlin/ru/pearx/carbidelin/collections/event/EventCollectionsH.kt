@@ -7,10 +7,4 @@
 
 package ru.pearx.carbidelin.collections.event
 
-
-
-
-
-
-
 internal inline fun Boolean.ifTrue(block: () -> Unit): Boolean = also { if (it) block() }
