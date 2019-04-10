@@ -3,6 +3,6 @@
 *.iml
 build
 run
-platform/js/node_modules
-platform/js/package-lock.json
+node_modules
+package-lock.json
 out

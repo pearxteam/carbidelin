@@ -1,5 +1,4 @@
 import ru.pearx.multigradle.util.MultiGradleExtension
-import ru.pearx.multigradle.util.subplatforms
 
 val devBuildNumber: String? by project
 
@@ -8,7 +7,7 @@ plugins {
     id("kotlin-gradle-plugin") apply (false)
 }
 
-subplatforms {
+project("modules").subprojects {
     group = "ru.pearx.carbidelin"
 
     apply<MavenPublishPlugin>()
@@ -17,7 +16,6 @@ subplatforms {
         if(devBuildNumber != null) {
             projectVersion = "$projectVersion-dev-$devBuildNumber"
         }
-        kotlinExperimentalFeatures.add("kotlin.ExperimentalUnsignedTypes")
     }
 
     configure<PublishingExtension> {
@@ -37,11 +35,6 @@ subplatforms {
                 pearxCredentials()
                 name = "release"
                 url = uri("https://repo.pearx.ru/maven2/release/")
-            }
-        }
-        publications {
-            register<MavenPublication>("maven") {
-                from(components["java"])
             }
         }
     }

@@ -1,27 +1,34 @@
-/*
- * Copyright © 2019, PearX Team
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this file,
- * You can obtain one at https://mozilla.org/MPL/2.0/.
- */
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
+import ru.pearx.multigradle.util.MultiGradleExtension
 
-import ru.pearx.multigradle.util.*
-import ru.pearx.multigradle.util.Platform
-import ru.pearx.multigradle.util.js.MultiGradleJsExtension
+val kotlinxIoVersion: String by project
+val textEncodingVersion: String by project
 
-subplatforms {
-    dependencies {
-        "api"(mpdep("org.jetbrains.kotlinx:kotlinx-io:${propertyString("kotlinxIoVersion")}", PLATFORM_COMMON))
-        "api"(mpdep(project(":modules:core")))
-    }
-    ifPlatform(PLATFORM_JS) {
-        configure<MultiGradleJsExtension> {
-            npmPackages {
-                put("text-encoding", propertyString("textEncodingVersion"))
+configure<KotlinMultiplatformExtension> {
+    sourceSets {
+        named("commonMain") {
+            dependencies {
+                api("org.jetbrains.kotlinx:kotlinx-io:$kotlinxIoVersion")
+                api(project(":modules:core"))
             }
         }
-        dependencies {
-            "implementation"(kotlin("test-js")) // hack: kotlinx-io-js depends on the kotlin-test-js :/
+        named("jvmMain") {
+            dependencies {
+                api("org.jetbrains.kotlinx:kotlinx-io-jvm:$kotlinxIoVersion")
+                api(project(":modules:core"))
+            }
         }
+        named("jsMain") {
+            dependencies {
+                api("org.jetbrains.kotlinx:kotlinx-io-js:$kotlinxIoVersion")
+                api(project(":modules:core"))
+            }
+        }
+    }
+}
+
+configure<MultiGradleExtension> {
+    npmPackages {
+        put("text-encoding", textEncodingVersion)
     }
 }
