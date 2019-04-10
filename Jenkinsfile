@@ -34,8 +34,8 @@ pipeline {
     post {
         always {
             ciSkip 'postProcess'
-            junit 'modules/*/*/build/test-results-prefixed/**/*.xml'
-            jacoco classPattern: 'modules/*/*/build/classes', execPattern: 'modules/*/*/build/jacoco/*.exec', sourcePattern: 'modules/*/*/src'
+            junit 'modules/*/build/test-results-prefixed/**/*.xml'
+            jacoco classPattern: 'modules/*/build/classes', execPattern: 'modules/*/build/jacoco/*.exec', sourcePattern: 'modules/*/src'
         }
     }
 }
