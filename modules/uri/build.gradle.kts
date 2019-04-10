@@ -9,19 +9,19 @@ configure<KotlinMultiplatformExtension> {
         named("commonMain") {
             dependencies {
                 api("org.jetbrains.kotlinx:kotlinx-io:$kotlinxIoVersion")
-                api(project(":modules:core"))
+                api(project(":modules:carbidelin-core"))
             }
         }
         named("jvmMain") {
             dependencies {
                 api("org.jetbrains.kotlinx:kotlinx-io-jvm:$kotlinxIoVersion")
-                api(project(":modules:core"))
+                api(project(":modules:carbidelin-core"))
             }
         }
         named("jsMain") {
             dependencies {
                 api("org.jetbrains.kotlinx:kotlinx-io-js:$kotlinxIoVersion")
-                api(project(":modules:core"))
+                api(project(":modules:carbidelin-core"))
             }
         }
     }
