@@ -35,23 +35,8 @@ open class EventSetRA<C : MutableSet<E>, E>(base: C, onUpdate: CollectionEventHa
 //endregion
 
 
-//region Parent Factories
+//region Factories
 fun <C : MutableSet<E>, E> eventSetSimpleBy(base: C, onUpdate: CollectionEventHandlerSimple): IEventSet<C, E> = if(base is RandomAccess) EventSetSimpleRA(base, onUpdate) else EventSetSimple(base, onUpdate)
 fun <C : MutableSet<E>, E> eventSetBy(base: C, onUpdate: CollectionEventHandler<E>): IEventSet<C, E> = if(base is RandomAccess) EventSetRA(base, onUpdate) else EventSet(base, onUpdate)
 inline fun <C : MutableSet<E>, E> eventSetBy(base: C, crossinline block: CollectionEventHandlerScope<E>.() -> Unit): IEventSet<C, E> = eventSetBy(base, CollectionEventHandlerScope<E>().also(block).createHandler())
-//endregion
-
-
-//region Child Factories
-fun <E> eventSetSimpleOf(vararg elements: E, onUpdate: CollectionEventHandlerSimple): IEventSet<MutableSet<E>, E> = eventSetSimpleBy(mutableSetOf(*elements), onUpdate)
-inline fun <E> eventSetOf(vararg elements: E, onUpdate: CollectionEventHandler<E>): IEventSet<MutableSet<E>, E> = eventSetBy(mutableSetOf(*elements), onUpdate)
-inline fun <E> eventSetOf(vararg elements: E, crossinline block: CollectionEventHandlerScope<E>.() -> Unit): IEventSet<MutableSet<E>, E> = eventSetBy(mutableSetOf(*elements), block)
-
-fun <E> eventHashSetSimpleOf(vararg elements: E, onUpdate: CollectionEventHandlerSimple): IEventSet<MutableSet<E>, E> = eventSetSimpleBy(hashSetOf(*elements), onUpdate)
-inline fun <E> eventHashSetOf(vararg elements: E, onUpdate: CollectionEventHandler<E>): IEventSet<MutableSet<E>, E> = eventSetBy(hashSetOf(*elements), onUpdate)
-inline fun <E> eventHashSetOf(vararg elements: E, crossinline block: CollectionEventHandlerScope<E>.() -> Unit): IEventSet<MutableSet<E>, E> = eventSetBy(hashSetOf(*elements), block)
-
-fun <E> eventLinkedSetSimpleOf(vararg elements: E, onUpdate: CollectionEventHandlerSimple): IEventSet<MutableSet<E>, E> = eventSetSimpleBy(linkedSetOf(*elements), onUpdate)
-inline fun <E> eventLinkedSetOf(vararg elements: E, onUpdate: CollectionEventHandler<E>): IEventSet<MutableSet<E>, E> = eventSetBy(linkedSetOf(*elements), onUpdate)
-inline fun <E> eventLinkedSetOf(vararg elements: E, crossinline block: CollectionEventHandlerScope<E>.() -> Unit): IEventSet<MutableSet<E>, E> = eventSetBy(linkedSetOf(*elements), block)
 //endregion
